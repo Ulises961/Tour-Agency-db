@@ -16,18 +16,18 @@ public class App
             Class.forName("org.postgresql.Driver");
             String url = "jdbc:postgresql://localhost/test";
            
-            Console con = System.console();  
-            // read line from the user input  
-            System.out.print("Please insert your username: ");  
+            // Console con = System.console();  
+            // // read line from the user input  
+            // System.out.print("Please insert your username: ");  
               
-            String username =con.readLine("");  
+            // String username =con.readLine("");  
               
            
-            // read password into the char array  
-            System.out.print("Please Enter Password:");  
-            String password = String.valueOf(con.readPassword(""));  
+            // // read password into the char array  
+            // System.out.print("Please Enter Password:");  
+            // String password = String.valueOf(con.readPassword(""));  
            
-            Connection conn = DriverManager.getConnection(url, username, password);
+            Connection conn = DriverManager.getConnection(url, "postgres", "postgres");
             conn.setAutoCommit(false);
             Menu menu = new Menu(conn);
             System.out.print("\n\n"); 

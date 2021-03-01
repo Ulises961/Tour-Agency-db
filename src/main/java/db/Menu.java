@@ -22,15 +22,15 @@ public class Menu {
         
         String option1 = "Assign a tour to a Guide";
         String option2 = "Get the monthly salary of a guide ";
-        String option3 = "Retrieve the most loyal client during this month";
-        String option4 = "Retrieve the best selling tour during this month";
+        String option3 = "Retrieve the most loyal client during on a chosen month of this year";
+        String option4 = "Retrieve the best selling tour during on a chosen month of this year";
         String option5 = "Insert a guide into the database";
         String option6 = "Find out how many times and name of tour the guide has done in transfer";
         int option = -1;
         
     while (option != 0){
 
-        System.out.printf("Please select an option:%n1: %s%n2: %s%n3: %s%n4: %s%n5: %s%n6:%s%n0 to exit%n%n",option1,
+        System.out.printf("%nPlease select an option:%n%n1: %s%n2: %s%n3: %s%n4: %s%n5: %s%n6:%s%n0 to exit%n%n",option1,
                             option2,option3,option4,option5,option6);
         
       

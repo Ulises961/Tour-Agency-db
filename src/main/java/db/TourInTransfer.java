@@ -23,6 +23,7 @@ public class TourInTransfer {
             pstmt.close();
         } catch (SQLException e) {
             System.err.println("The query has been aborted.\n"+e.getMessage()+"\n\n");
+            e.printStackTrace();
         }
 
     }
@@ -35,28 +36,47 @@ public class TourInTransfer {
                                 "AND G.code = D.guide AND D.tour = T.code " +
                                 "AND G.base <> T.city " +
                                 "GROUP BY (T.name)";
-
+     
         try {
-            pstmt = conn.prepareStatement(toursIntransfer);
+            
+        PreparedStatement pstmt = conn.prepareStatement(toursIntransfer);
+
+            presentGuides();
+
             int code = Utils.getInput("Please insert the guide's code");
+            
             pstmt.setInt(1, code);
 
             ResultSet table = pstmt.executeQuery();
             int i = 0;
-            System.out.printf("%n%n------The guide with code %d has ",code);
+            
+            System.out.printf("%n%n------ The guide has done ");
             while (table.next()) {
-                System.out.printf("done %d times %s", table.getInt("times"), table.getString("Tname"));
+                System.out.printf("%d times  < %s > %n", table.getInt("times"), table.getString("Tname"));
                 i++;
             }
             if ( i == 0)
-                System.out.print("not done tours in transfer");
+                System.out.print("no tours in transfer");
             System.out.printf("-------%n%n");
 
         } catch (SQLException e) {
             conn.rollback();
-            throw new SQLException(e.getMessage());
+            throw new SQLException(e);
 
         }
+
+    
+   
+    }
+    private void presentGuides() throws SQLException {
+        System.out.println("Guides in database\nCode Name");
+        String listOfGuides = " SELECT code, name FROM Guide";
+        pstmt = conn.prepareStatement(listOfGuides);
+        ResultSet table = pstmt.executeQuery();
+            while (table.next()) {
+                System.out.printf("%d %s%n", table.getInt("code"), table.getString("name"));
+            }
+        pstmt.clearParameters();
     }
 
 }

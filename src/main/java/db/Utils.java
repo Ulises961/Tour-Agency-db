@@ -3,6 +3,8 @@ package db;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Time;
+import java.util.Date;
 import java.util.Map;
 
 /** Utility class to read and parse the inputs of the user on the console*/
@@ -31,6 +33,7 @@ public class Utils {
         System.out.println(message);
         String line = readString();
         code = parseToInt(line); 
+      
     }
     
     return code;
@@ -60,5 +63,15 @@ public class Utils {
     }
     return line;
   }
+
+  public static int validateMonth(String message){
+    int month = 13;
+
+    while(month > 12)
+      month = getInput(message);
+    
+    return month;
+  }
+ 
 
 }

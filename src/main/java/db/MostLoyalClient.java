@@ -41,23 +41,25 @@ public class MostLoyalClient {
          
         try {
             pstmt = conn.prepareStatement(mostLoyalClient);
-            int month = Utils.getInput("Please insert the month");
+            System.out.println("Retrieving the most loyal client\n");
+            int month = Utils.validateMonth("Please insert a month in the format MM");
+            
             pstmt.setInt(1, month);
            
             ResultSet  table =  pstmt.executeQuery();
             int i = 0;
 
             while(table.next()){
-                System.out.printf("%n%n------The most loyal client up to the moment is %s - with %d bookings.-------%n%n",
+                System.out.printf("%n%n------ The most loyal client up to the moment is %s with %d bookings ------%n%n",
                                 table.getString("name"), table.getInt("loyalty"));
                 i++;
             }
             if(i == 0)
-                System.out.println("\n\n-------All clients have the same ranking-------\n\n");
+                System.out.println("\n\n------ All clients have the same ranking ------\n\n");
 
     } catch (SQLException e) {
         conn.rollback();
-        throw new SQLException(e.getMessage());
+        throw new SQLException(e.getMessage()); return month;
        
     }
 

@@ -24,7 +24,7 @@ public class AssignAtour {
       this.stmt = conn.createStatement();
     
     } catch (SQLException e) {
-      e.printStackTrace();
+     System.err.println(e.getMessage());
     }
 
   }
@@ -110,6 +110,8 @@ public class AssignAtour {
       }
       
       pstmt.execute();
+      pstmt.clearParameters();
+      transactionSuccess(guide, date);
     
     }catch (SQLException e){
       conn.rollback();
@@ -143,7 +145,7 @@ public class AssignAtour {
 /** Prints on the console the clients available  and prompts the user to choose a valid Tax code, returns the chosen code */
   private int selectClient() throws Exception {
     Map<Integer, String> clients = getClients();
-    System.out.println("Clients available: ");
+    System.out.println("Clients available:");
     clients.forEach((k, v) -> System.out.printf("%d: %s%n", k, v));
     
     int client = Utils.findCode(clients, "code");
@@ -404,5 +406,19 @@ public class AssignAtour {
         return guideHonorary;
   }
 
+    private void transactionSuccess(Guide guide, Date date) throws SQLException {
+      String query = "SELECT T.name AS name, D.start_time AS st, D.end_time AS et"+ 
+                    " FROM Delivers D join Tour T on D.tour = T.code WHERE guide =? AND date = ?";
+      pstmt = conn.prepareStatement(query);
+      pstmt.setInt(1,guide.getCode());
+      pstmt.setDate(2, date);
+      ResultSet table = pstmt.executeQuery();
+      System.out.println("Guide "+guide.getCode()+" ("+guide.getName()+") is delivering on date "+date+": ");
+      while(table.next()){
+        System.out.printf("%s %s %s%n",table.getString("name"),table.getTime("st"), table.getTime("et"));
+      }
+      
+
+    }
   
 }

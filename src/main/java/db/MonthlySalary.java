@@ -37,26 +37,40 @@ public class MonthlySalary {
                                 "AND EXTRACT (YEAR FROM date) = EXTRACT (YEAR FROM NOW())"+
                                 "GROUP BY Guide.name";
                         
-        
+        presentGuides();
         int code = Utils.getInput("Please insert the code of the guide");
-        int month = Utils.getInput("Please insert the month");
+        int month = Utils.getInput("Please insert the month in format MM");
     
          
         try {
             pstmt = conn.prepareStatement(calculateSalary);
-     
             pstmt.setInt(1,code);
             pstmt.setInt(2,month);
             ResultSet  table = pstmt.executeQuery();
-            while(table.next())
-            System.out.printf("%n%n------The salary for the guide %s - code: %d:  is %d.-------%n%n",table.getString("name"), code, table.getInt("salary"));
+            int i = 0;
 
-
+            while(table.next()){
+                System.out.printf("%n%n------The salary of guide %d (%s) on %d is € %d.-------%n%n",code,table.getString("name"),month, table.getInt("salary"));
+                i++;
+            }
+            if (i == 0)
+            System.out.println("The guide has not worked for the company on the selected month");
+           
     } catch (SQLException e) {
-        
         conn.rollback();
+        throw new SQLException(e);
     }
 
+    }
+    private void presentGuides() throws SQLException {
+        System.out.println("Guides in database\n\nCode Name");
+        String listOfGuides = " SELECT code, name FROM Guide";
+        pstmt = conn.prepareStatement(listOfGuides);
+        ResultSet table = pstmt.executeQuery();
+        while (table.next()) {
+            System.out.printf("%d %s%n", table.getInt("code"), table.getString("name"));
+        }
+        pstmt.clearParameters();
     }
 
 

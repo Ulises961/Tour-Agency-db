@@ -37,8 +37,9 @@ public class MostPopularTour{
                 + "FROM delivers D JOIN tour T  ON D.tour = T.code " + "WHERE  EXTRACT (MONTH FROM D.date) = ? "
                 + "AND EXTRACT (YEAR FROM D.date) = EXTRACT (YEAR FROM NOW()) " + " GROUP BY T.name ORDER BY (popularity) DESC LIMIT 1";
         try {
+            System.out.println("Retrieving the best selling tour\n");
             pstmt = conn.prepareStatement(mostPopularTour);
-            int month = Utils.getInput("Please insert the month");
+            int month = Utils.validateMonth("Please insert the month");
             pstmt.setInt(1, month);
 
             ResultSet table = pstmt.executeQuery();
@@ -46,12 +47,12 @@ public class MostPopularTour{
 
             while (table.next()) {
                 System.out.printf(
-                        "%n%n-------The most popular tour this month is %s - with %d bookings.-------%n%n",
+                        "%n%n------- The most popular tour this month is < %s > - with %d bookings -------%n%n",
                         table.getString("Tname"), table.getInt("popularity"));
                 i++;
             }
             if(i == 0)
-                System.out.println("\n\n-------There are no tours booked for this month-------\n\n");
+                System.out.println("\n\n------- There are no tours booked for this month -------\n\n");
 
         } catch (SQLException e) {
             e.printStackTrace();
